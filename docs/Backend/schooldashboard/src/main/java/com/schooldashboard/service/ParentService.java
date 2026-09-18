@@ -19,4 +19,7 @@ public class ParentService {
     public List<Parent> getAllParents() {
         return parentRepository.findAll();
     }
+    public Parent login(String email, String password) {
+    return parentRepository.findByEmailAndPassword(email, password);
+}
 }

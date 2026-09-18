@@ -19,6 +19,10 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
+    public List<Student> getStudentsByParentId(int parentId) {
+    return studentRepository.findByParentId(parentId);
+    }
+
     public Student getStudentById(int id) {
         return studentRepository.findById(id).orElse(null);
     }

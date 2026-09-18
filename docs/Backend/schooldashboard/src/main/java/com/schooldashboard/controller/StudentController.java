@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/students")
 public class StudentController {
 
@@ -19,6 +20,11 @@ public class StudentController {
     @GetMapping
     public List<Student> getAllStudents() {
         return studentService.getAllStudents();
+    }
+
+    @GetMapping("/parent/{parentId}")
+    public List<Student> getStudentsByParentId(@PathVariable int parentId) {
+    return studentService.getStudentsByParentId(parentId);
     }
 
     @GetMapping("/{id}")
