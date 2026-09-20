@@ -49,11 +49,10 @@ public class Parent {
     }
 
     public String getPassword() {
-    return password;
-}
+        return password;
+    }
 
     public void setPassword(String password) {
-    this.password = password;
-}
-
+        this.password = password;
+    }
 }

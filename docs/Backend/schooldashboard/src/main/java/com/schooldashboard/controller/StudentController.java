@@ -1,10 +1,18 @@
 package com.schooldashboard.controller;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.schooldashboard.entity.Student;
 import com.schooldashboard.service.StudentService;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
@@ -24,7 +32,7 @@ public class StudentController {
 
     @GetMapping("/parent/{parentId}")
     public List<Student> getStudentsByParentId(@PathVariable int parentId) {
-    return studentService.getStudentsByParentId(parentId);
+        return studentService.getStudentsByParentId(parentId);
     }
 
     @GetMapping("/{id}")
@@ -33,7 +41,7 @@ public class StudentController {
     }
 
     @PostMapping
-    public Student addStudent(@RequestBody Student student) {
+    public Student saveStudent(@RequestBody Student student) {
         return studentService.saveStudent(student);
     }
 

@@ -21,26 +21,30 @@ body {
 }
 
 .login-box {
+  position: relative;
   width: 100%;
   max-width: 1000px;
   min-height: 620px;
-  display: grid;
-  grid-template-columns: 45% 55%;
-  grid-template-rows: auto auto auto auto auto auto auto;
   background: white;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+  padding: 45px 5% 45px 50%;
 }
 
-/* LEFT SIDE */
+/* ================= LEFT SIDE ================= */
 
 .login-box::before {
   content: "🚌\A\A School Bus\A Tracking System\A\A 📍 Live Bus Tracking\A 🔔 Parent Notifications\A 🛡 Safe & Secure";
+
   white-space: pre-wrap;
 
-  grid-column: 1;
-  grid-row: 1 / 8;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  width: 45%;
 
   display: flex;
   align-items: center;
@@ -57,26 +61,37 @@ body {
   line-height: 1.6;
 }
 
-/* RIGHT SIDE TITLE */
+/* ================= RIGHT SIDE ================= */
+
+.login-box > * {
+  position: relative;
+  width: 100%;
+}
+
+/* TITLE */
 
 .login-box h1 {
-  grid-column: 2;
-  grid-row: 1;
-
-  width: 80%;
-  margin: 55px auto 25px;
-
+  margin: 10px auto 25px;
   text-align: center;
   color: #17325c;
   font-size: 30px;
 }
 
-/* EMAIL + PASSWORD */
+/* SUBTITLE */
+
+.login-subtitle {
+  text-align: center;
+  color: #60758f;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+/* ================= INPUTS ================= */
 
 .input-box {
-  grid-column: 2;
+  display: block;
 
-  width: 80%;
+  width: 100%;
   margin: 12px auto;
 
   padding: 14px 16px;
@@ -91,27 +106,44 @@ body {
   outline: none;
 }
 
-.input-box:first-of-type {
-  grid-row: 2;
-}
-
-.input-box:nth-of-type(2) {
-  grid-row: 3;
-}
-
 .input-box:focus {
   border-color: #2878e8;
 }
 
-/* PASSWORD RULES */
+/* ================= PASSWORD ================= */
+
+.password-container {
+  position: relative;
+  width: 100%;
+  margin: 12px auto;
+}
+
+.password-container .input-box {
+  width: 100%;
+  margin: 0;
+  padding-right: 65px;
+}
+
+.show-password-button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  border: none;
+  background: transparent;
+
+  color: #2878e8;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+/* ================= PASSWORD RULES ================= */
 
 .password-rules {
-  grid-column: 2;
-  grid-row: 4 / 7;
-
-  width: 80%;
+  width: 100%;
   margin: 10px auto;
-
   padding: 5px 0;
 }
 
@@ -128,14 +160,13 @@ body {
   color: #d83b3b;
 }
 
-/* LOGIN BUTTON */
+/* ================= LOGIN BUTTONS ================= */
 
 .login-button {
-  grid-column: 2;
-  grid-row: 7;
+  display: block;
 
-  width: 80%;
-  margin: 10px auto 35px;
+  width: 100%;
+  margin: 15px auto 0;
 
   padding: 14px;
 
@@ -158,6 +189,74 @@ body {
 .login-button:disabled {
   background: #c5cfdb;
   cursor: not-allowed;
+}
+
+/* ================= SIGN UP TEXT ================= */
+
+.signup-text {
+  width: 100%;
+  margin: 20px auto 0;
+
+  text-align: center;
+
+  color: #60758f;
+  font-size: 14px;
+}
+
+.signup-link {
+  color: #2878e8;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
+}
+
+/* ================= ERROR ================= */
+
+.login-error {
+  width: 100%;
+  margin: 10px auto;
+
+  text-align: center;
+
+  color: #d83b3b;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* ================= SUCCESS ================= */
+
+.success-message {
+  width: 100%;
+  margin: 10px auto;
+
+  text-align: center;
+
+  color: #159447;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* ================= LOGOUT ================= */
+
+.logout-button {
+  margin-top: 40px;
+
+  padding: 12px 30px;
+
+  border: none;
+  border-radius: 9px;
+
+  background: #17325c;
+  color: white;
+
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background: #0f2342;
 }
 
 /* ================= DASHBOARD ================= */
@@ -188,9 +287,12 @@ body {
   flex-wrap: wrap;
 }
 
+/* ================= CARDS ================= */
+
 .card {
   width: 280px;
   min-height: 190px;
+
   padding: 30px 25px;
 
   background: white;
@@ -209,60 +311,49 @@ body {
   color: #60758f;
 }
 
-.logout-button {
-  margin-top: 40px;
-  padding: 12px 30px;
-
-  border: none;
-  border-radius: 9px;
-
-  background: #17325c;
-  color: white;
-
-  cursor: pointer;
-}
-
 /* ================= MOBILE ================= */
 
 @media (max-width: 750px) {
 
+  .login-page {
+    padding: 20px;
+  }
+
   .login-box {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto auto auto auto auto;
+    max-width: 500px;
+    min-height: auto;
+
+    padding: 30px;
   }
 
   .login-box::before {
-    grid-column: 1;
-    grid-row: 1;
+    position: relative;
 
-    min-height: 220px;
+    width: 100%;
+    min-height: 200px;
+
+    margin: -30px -30px 30px;
+
+    padding: 25px;
+
+    font-size: 20px;
   }
 
   .login-box h1 {
-    grid-column: 1;
-    grid-row: 2;
+    font-size: 25px;
+    margin-top: 10px;
   }
 
-  .input-box {
-    grid-column: 1;
-    width: 80%;
+  .dashboard {
+    padding: 30px 15px;
   }
 
-  .input-box:first-of-type {
-    grid-row: 3;
+  .dashboard h1 {
+    font-size: 32px;
   }
 
-  .input-box:nth-of-type(2) {
-    grid-row: 4;
-  }
-
-  .password-rules {
-    grid-column: 1;
-    grid-row: 5 / 8;
-  }
-
-  .login-button {
-    grid-column: 1;
-    grid-row: 8;
+  .card {
+    width: 100%;
+    max-width: 400px;
   }
 }

@@ -14,6 +14,8 @@ public class Driver {
     private String driverName;
     private String phoneNumber;
     private String licenseNumber;
+    private String email;
+    private String password;
 
     public Long getDriverId() {
         return driverId;
@@ -45,5 +47,21 @@ public class Driver {
 
     public void setLicenseNumber(String licenseNumber) {
         this.licenseNumber = licenseNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

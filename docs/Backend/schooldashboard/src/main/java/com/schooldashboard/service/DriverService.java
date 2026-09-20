@@ -19,4 +19,8 @@ public class DriverService {
     public List<Driver> getAllDrivers() {
         return driverRepository.findAll();
     }
+
+    public Driver login(String email, String password) {
+        return driverRepository.findByEmailAndPassword(email, password);
+    }
 }
