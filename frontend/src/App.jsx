@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:8082";
+
 function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +20,8 @@ function App() {
   const [driverEmail, setDriverEmail] = useState("");
   const [driverPassword, setDriverPassword] = useState("");
   const [driverLoginError, setDriverLoginError] = useState("");
-  const [driverShowPassword, setDriverShowPassword] = useState(false);
+  const [driverShowPassword, setDriverShowPassword] =
+    useState(false);
 
   const [parentName, setParentName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -40,7 +44,7 @@ function App() {
   // Get Bus Location and Notifications
   useEffect(() => {
     const fetchBusLocation = () => {
-      fetch("http://localhost:8082/bus-locations")
+      fetch(`${API_URL}/bus-locations`)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Failed to fetch bus location");
@@ -56,7 +60,10 @@ function App() {
           }
         })
         .catch((error) => {
-          console.error("Error fetching bus location:", error);
+          console.error(
+            "Error fetching bus location:",
+            error
+          );
         });
     };
 
@@ -66,7 +73,7 @@ function App() {
       fetchBusLocation();
     }, 10000);
 
-    fetch("http://localhost:8082/notifications")
+    fetch(`${API_URL}/notifications`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch notifications");
@@ -79,7 +86,10 @@ function App() {
         setNotifications(data);
       })
       .catch((error) => {
-        console.error("Error fetching notifications:", error);
+        console.error(
+          "Error fetching notifications:",
+          error
+        );
       });
 
     return () => {
@@ -93,10 +103,12 @@ function App() {
       return;
     }
 
-    fetch(`http://localhost:8082/students/parent/${parentId}`)
+    fetch(`${API_URL}/students/parent/${parentId}`)
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Failed to fetch student details");
+          throw new Error(
+            "Failed to fetch student details"
+          );
         }
 
         return response.json();
@@ -106,7 +118,10 @@ function App() {
         setStudents(data);
       })
       .catch((error) => {
-        console.error("Error fetching student details:", error);
+        console.error(
+          "Error fetching student details:",
+          error
+        );
       });
   }, [parentId]);
 
@@ -115,11 +130,13 @@ function App() {
     setLoginError("");
 
     if (!email || !password) {
-      setLoginError("Please enter email and password");
+      setLoginError(
+        "Please enter email and password"
+      );
       return;
     }
 
-    fetch("http://localhost:8082/parents/login", {
+    fetch(`${API_URL}/parents/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -131,7 +148,9 @@ function App() {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Invalid email or password");
+          throw new Error(
+            "Invalid email or password"
+          );
         }
 
         return response.json();
@@ -140,7 +159,9 @@ function App() {
         console.log("Login successful:", data);
 
         if (!data) {
-          throw new Error("Invalid email or password");
+          throw new Error(
+            "Invalid email or password"
+          );
         }
 
         setParentId(data.parentId);
@@ -148,7 +169,9 @@ function App() {
       })
       .catch((error) => {
         console.error("Login error:", error);
-        setLoginError("Invalid email or password");
+        setLoginError(
+          "Invalid email or password"
+        );
       });
   };
 
@@ -164,21 +187,27 @@ function App() {
       !password ||
       !confirmPassword
     ) {
-      setSignUpError("Please fill in all fields");
+      setSignUpError(
+        "Please fill in all fields"
+      );
       return;
     }
 
     if (password !== confirmPassword) {
-      setSignUpError("Passwords do not match");
+      setSignUpError(
+        "Passwords do not match"
+      );
       return;
     }
 
     if (password.length < 6) {
-      setSignUpError("Password must contain at least 6 characters");
+      setSignUpError(
+        "Password must contain at least 6 characters"
+      );
       return;
     }
 
-    fetch("http://localhost:8082/parents/signup", {
+    fetch(`${API_URL}/parents/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -194,13 +223,18 @@ function App() {
         const data = await response.text();
 
         if (!response.ok) {
-          throw new Error(data || "Registration failed");
+          throw new Error(
+            data || "Registration failed"
+          );
         }
 
         return data;
       })
       .then((data) => {
-        console.log("Sign Up successful:", data);
+        console.log(
+          "Sign Up successful:",
+          data
+        );
 
         setSignUpMessage(
           "Account created successfully! Please sign in."
@@ -213,12 +247,23 @@ function App() {
         setConfirmPassword("");
       })
       .catch((error) => {
-        console.error("Sign Up error:", error);
+        console.error(
+          "Sign Up error:",
+          error
+        );
 
-        if (error.message.includes("Email already registered")) {
-          setSignUpError("Email already registered");
+        if (
+          error.message.includes(
+            "Email already registered"
+          )
+        ) {
+          setSignUpError(
+            "Email already registered"
+          );
         } else {
-          setSignUpError("Registration failed. Please try again.");
+          setSignUpError(
+            "Registration failed. Please try again."
+          );
         }
       });
   };
@@ -228,11 +273,13 @@ function App() {
     setDriverLoginError("");
 
     if (!driverEmail || !driverPassword) {
-      setDriverLoginError("Please enter email and password");
+      setDriverLoginError(
+        "Please enter email and password"
+      );
       return;
     }
 
-    fetch("http://localhost:8082/drivers/login", {
+    fetch(`${API_URL}/drivers/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -244,16 +291,23 @@ function App() {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Invalid driver email or password");
+          throw new Error(
+            "Invalid driver email or password"
+          );
         }
 
         return response.json();
       })
       .then((data) => {
-        console.log("Driver login successful:", data);
+        console.log(
+          "Driver login successful:",
+          data
+        );
 
         if (!data) {
-          throw new Error("Invalid driver email or password");
+          throw new Error(
+            "Invalid driver email or password"
+          );
         }
 
         setDriverName(data.driverName || "");
@@ -261,8 +315,14 @@ function App() {
         setDriverLoginError("");
       })
       .catch((error) => {
-        console.error("Driver login error:", error);
-        setDriverLoginError("Invalid driver email or password");
+        console.error(
+          "Driver login error:",
+          error
+        );
+
+        setDriverLoginError(
+          "Invalid driver email or password"
+        );
       });
   };
 
@@ -277,7 +337,9 @@ function App() {
       !driverLatitude ||
       !driverLongitude
     ) {
-      setDriverError("Please fill in all fields");
+      setDriverError(
+        "Please fill in all fields"
+      );
       return;
     }
 
@@ -285,18 +347,30 @@ function App() {
     const longitude = Number(driverLongitude);
     const busId = Number(driverBusId);
 
-    if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
-      setDriverError("Latitude and longitude must be valid numbers");
+    if (
+      Number.isNaN(latitude) ||
+      Number.isNaN(longitude)
+    ) {
+      setDriverError(
+        "Latitude and longitude must be valid numbers"
+      );
       return;
     }
 
     if (latitude < -90 || latitude > 90) {
-      setDriverError("Latitude must be between -90 and 90");
+      setDriverError(
+        "Latitude must be between -90 and 90"
+      );
       return;
     }
 
-    if (longitude < -180 || longitude > 180) {
-      setDriverError("Longitude must be between -180 and 180");
+    if (
+      longitude < -180 ||
+      longitude > 180
+    ) {
+      setDriverError(
+        "Longitude must be between -180 and 180"
+      );
       return;
     }
 
@@ -307,7 +381,7 @@ function App() {
       longitude: longitude,
     };
 
-    fetch("http://localhost:8082/bus-locations", {
+    fetch(`${API_URL}/bus-locations`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -316,13 +390,18 @@ function App() {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Failed to update bus location");
+          throw new Error(
+            "Failed to update bus location"
+          );
         }
 
         return response.json();
       })
       .then((data) => {
-        console.log("Location updated:", data);
+        console.log(
+          "Location updated:",
+          data
+        );
 
         setBusLocation(data);
 
@@ -331,7 +410,11 @@ function App() {
         );
       })
       .catch((error) => {
-        console.error("Location update error:", error);
+        console.error(
+          "Location update error:",
+          error
+        );
+
         setDriverError(
           "Failed to update location. Please try again."
         );
@@ -347,9 +430,7 @@ function App() {
   if (isDriverMode && !driverLoggedIn) {
     return (
       <div className="login-page">
-
         <div className="login-box">
-
           <h1>Driver Login</h1>
 
           <p className="login-subtitle">
@@ -361,29 +442,39 @@ function App() {
             placeholder="Driver Email"
             className="input-box"
             value={driverEmail}
-            onChange={(e) => setDriverEmail(e.target.value)}
+            onChange={(e) =>
+              setDriverEmail(e.target.value)
+            }
           />
 
           <div className="password-container">
-
             <input
-              type={driverShowPassword ? "text" : "password"}
+              type={
+                driverShowPassword
+                  ? "text"
+                  : "password"
+              }
               placeholder="Password"
               className="input-box"
               value={driverPassword}
-              onChange={(e) => setDriverPassword(e.target.value)}
+              onChange={(e) =>
+                setDriverPassword(e.target.value)
+              }
             />
 
             <button
               type="button"
               className="show-password-button"
               onClick={() =>
-                setDriverShowPassword(!driverShowPassword)
+                setDriverShowPassword(
+                  !driverShowPassword
+                )
               }
             >
-              {driverShowPassword ? "Hide" : "Show"}
+              {driverShowPassword
+                ? "Hide"
+                : "Show"}
             </button>
-
           </div>
 
           {driverLoginError && (
@@ -411,9 +502,7 @@ function App() {
           >
             Back to Parent Login
           </button>
-
         </div>
-
       </div>
     );
   }
@@ -430,7 +519,9 @@ function App() {
       >
         <h1>Driver Dashboard</h1>
 
-        <p>School Bus Tracking System</p>
+        <p>
+          School Bus Tracking System
+        </p>
 
         <div
           className="card"
@@ -442,11 +533,13 @@ function App() {
           <h2>🚍 Driver Details</h2>
 
           <p>
-            <strong>Driver Name:</strong> {driverName}
+            <strong>Driver Name:</strong>{" "}
+            {driverName}
           </p>
 
           <p>
-            <strong>Bus ID:</strong> {driverBusId}
+            <strong>Bus ID:</strong>{" "}
+            {driverBusId}
           </p>
         </div>
 
@@ -464,7 +557,9 @@ function App() {
             placeholder="Bus ID"
             className="input-box"
             value={driverBusId}
-            onChange={(e) => setDriverBusId(e.target.value)}
+            onChange={(e) =>
+              setDriverBusId(e.target.value)
+            }
           />
 
           <input
@@ -473,7 +568,9 @@ function App() {
             placeholder="Latitude"
             className="input-box"
             value={driverLatitude}
-            onChange={(e) => setDriverLatitude(e.target.value)}
+            onChange={(e) =>
+              setDriverLatitude(e.target.value)
+            }
           />
 
           <input
@@ -482,7 +579,9 @@ function App() {
             placeholder="Longitude"
             className="input-box"
             value={driverLongitude}
-            onChange={(e) => setDriverLongitude(e.target.value)}
+            onChange={(e) =>
+              setDriverLongitude(e.target.value)
+            }
           />
 
           {driverError && (
@@ -499,7 +598,9 @@ function App() {
 
           <button
             className="login-button"
-            onClick={handleDriverLocationUpdate}
+            onClick={
+              handleDriverLocationUpdate
+            }
           >
             Update Bus Location
           </button>
@@ -513,7 +614,9 @@ function App() {
               margin: "20px auto",
             }}
           >
-            <h2>Current Bus Location</h2>
+            <h2>
+              Current Bus Location
+            </h2>
 
             <p>
               <strong>Bus ID:</strong>{" "}
@@ -570,7 +673,6 @@ function App() {
         >
           Back to Login
         </button>
-
       </div>
     );
   }
@@ -579,50 +681,57 @@ function App() {
   if (loggedIn) {
     return (
       <div className="dashboard">
-
         <h1>Parent Dashboard</h1>
 
-        <p>Welcome to School Bus Tracking System</p>
+        <p>
+          Welcome to School Bus Tracking System
+        </p>
 
         <div className="dashboard-cards">
 
           {/* Student Details */}
           <div className="card">
-
             <h2>Student Details</h2>
 
             {students.length > 0 ? (
               students.map((student) => (
                 <div key={student.studentId}>
-
                   <p>
-                    <strong>Student Name:</strong>{" "}
+                    <strong>
+                      Student Name:
+                    </strong>{" "}
                     {student.studentName}
                   </p>
 
                   <p>
-                    <strong>Class:</strong>{" "}
+                    <strong>
+                      Class:
+                    </strong>{" "}
                     {student.className}
                   </p>
 
                   <p>
-                    <strong>Parent ID:</strong>{" "}
+                    <strong>
+                      Parent ID:
+                    </strong>{" "}
                     {student.parentId}
                   </p>
 
                   <p>
-                    <strong>Bus ID:</strong>{" "}
+                    <strong>
+                      Bus ID:
+                    </strong>{" "}
                     {student.busId}
                   </p>
 
                   <hr />
-
                 </div>
               ))
             ) : (
-              <p>No student details available.</p>
+              <p>
+                No student details available.
+              </p>
             )}
-
           </div>
 
           {/* Bus Location */}
@@ -632,24 +741,26 @@ function App() {
               minWidth: "350px",
             }}
           >
-
             <h2>Bus Location</h2>
 
             {busLocation ? (
               <>
-
                 <p>
                   <strong>Bus ID:</strong>{" "}
                   {busLocation.busId}
                 </p>
 
                 <p>
-                  <strong>Latitude:</strong>{" "}
+                  <strong>
+                    Latitude:
+                  </strong>{" "}
                   {busLocation.latitude}
                 </p>
 
                 <p>
-                  <strong>Longitude:</strong>{" "}
+                  <strong>
+                    Longitude:
+                  </strong>{" "}
                   {busLocation.longitude}
                 </p>
 
@@ -681,37 +792,42 @@ function App() {
                     marginTop: "10px",
                   }}
                 >
-                  📍 Live bus location updates automatically
+                  📍 Live bus location
+                  updates automatically
                 </p>
-
               </>
             ) : (
-              <p>Loading bus location...</p>
+              <p>
+                Loading bus location...
+              </p>
             )}
-
           </div>
 
           {/* Notifications */}
           <div className="card">
-
             <h2>Notifications</h2>
 
             {notifications.length > 0 ? (
-              notifications.map((notification) => (
-                <div key={notification.notificationId}>
-
-                  <p>
-                    🔔 {notification.message}
-                  </p>
-
-                </div>
-              ))
+              notifications.map(
+                (notification) => (
+                  <div
+                    key={
+                      notification.notificationId
+                    }
+                  >
+                    <p>
+                      🔔{" "}
+                      {notification.message}
+                    </p>
+                  </div>
+                )
+              )
             ) : (
-              <p>No notifications available</p>
+              <p>
+                No notifications available
+              </p>
             )}
-
           </div>
-
         </div>
 
         {/* Logout */}
@@ -723,11 +839,12 @@ function App() {
             setEmail("");
             setPassword("");
             setStudents([]);
+            setBusLocation(null);
+            setNotifications([]);
           }}
         >
           Logout
         </button>
-
       </div>
     );
   }
@@ -736,9 +853,7 @@ function App() {
   if (isSignUp) {
     return (
       <div className="login-page">
-
         <div className="login-box">
-
           <h1>Create Account</h1>
 
           <p className="login-subtitle">
@@ -750,7 +865,9 @@ function App() {
             placeholder="Parent Name"
             className="input-box"
             value={parentName}
-            onChange={(e) => setParentName(e.target.value)}
+            onChange={(e) =>
+              setParentName(e.target.value)
+            }
           />
 
           <input
@@ -758,7 +875,9 @@ function App() {
             placeholder="Phone Number"
             className="input-box"
             value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            onChange={(e) =>
+              setPhoneNumber(e.target.value)
+            }
           />
 
           <input
@@ -766,29 +885,39 @@ function App() {
             placeholder="Email"
             className="input-box"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) =>
+              setEmail(e.target.value)
+            }
           />
 
           <div className="password-container">
-
             <input
-              type={showPassword ? "text" : "password"}
+              type={
+                showPassword
+                  ? "text"
+                  : "password"
+              }
               placeholder="Password"
               className="input-box"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
             />
 
             <button
               type="button"
               className="show-password-button"
               onClick={() =>
-                setShowPassword(!showPassword)
+                setShowPassword(
+                  !showPassword
+                )
               }
             >
-              {showPassword ? "Hide" : "Show"}
+              {showPassword
+                ? "Hide"
+                : "Show"}
             </button>
-
           </div>
 
           <input
@@ -797,7 +926,9 @@ function App() {
             className="input-box"
             value={confirmPassword}
             onChange={(e) =>
-              setConfirmPassword(e.target.value)
+              setConfirmPassword(
+                e.target.value
+              )
             }
           />
 
@@ -833,9 +964,7 @@ function App() {
               Sign In
             </span>
           </p>
-
         </div>
-
       </div>
     );
   }
@@ -843,10 +972,10 @@ function App() {
   // Main Parent Login Page
   return (
     <div className="login-page">
-
       <div className="login-box">
-
-        <h1>School Bus Tracking System</h1>
+        <h1>
+          School Bus Tracking System
+        </h1>
 
         <p className="login-subtitle">
           Parent Login
@@ -857,29 +986,39 @@ function App() {
           placeholder="Email"
           className="input-box"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) =>
+            setEmail(e.target.value)
+          }
         />
 
         <div className="password-container">
-
           <input
-            type={showPassword ? "text" : "password"}
+            type={
+              showPassword
+                ? "text"
+                : "password"
+            }
             placeholder="Password"
             className="input-box"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) =>
+              setPassword(e.target.value)
+            }
           />
 
           <button
             type="button"
             className="show-password-button"
             onClick={() =>
-              setShowPassword(!showPassword)
+              setShowPassword(
+                !showPassword
+              )
             }
           >
-            {showPassword ? "Hide" : "Show"}
+            {showPassword
+              ? "Hide"
+              : "Show"}
           </button>
-
         </div>
 
         {loginError && (
@@ -924,9 +1063,7 @@ function App() {
             Sign Up
           </span>
         </p>
-
       </div>
-
     </div>
   );
 }
