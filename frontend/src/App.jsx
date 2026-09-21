@@ -14,6 +14,20 @@ function App() {
 
   const [isSignUp, setIsSignUp] = useState(false);
 
+  // OTP states
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [otpMessage, setOtpMessage] = useState("");
+  const [otpError, setOtpError] = useState("");
+
+  // Parent Sign Up states
+  const [parentName, setParentName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [signUpMessage, setSignUpMessage] = useState("");
+  const [signUpError, setSignUpError] = useState("");
+
   // Driver states
   const [isDriverMode, setIsDriverMode] = useState(false);
   const [driverLoggedIn, setDriverLoggedIn] = useState(false);
@@ -23,12 +37,7 @@ function App() {
   const [driverShowPassword, setDriverShowPassword] =
     useState(false);
 
-  const [parentName, setParentName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [signUpMessage, setSignUpMessage] = useState("");
-  const [signUpError, setSignUpError] = useState("");
-
+  // Dashboard states
   const [busLocation, setBusLocation] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [students, setStudents] = useState([]);
@@ -169,8 +178,139 @@ function App() {
       })
       .catch((error) => {
         console.error("Login error:", error);
+
         setLoginError(
           "Invalid email or password"
+        );
+      });
+  };
+
+  // Send OTP
+  const handleSendOtp = () => {
+    setOtpError("");
+    setOtpMessage("");
+    setOtpVerified(false);
+
+    if (!email) {
+      setOtpError(
+        "Please enter your email first"
+      );
+      return;
+    }
+
+    fetch(`${API_URL}/parents/send-otp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.text();
+
+        console.log(
+          "OTP send status:",
+          response.status
+        );
+        console.log(
+          "OTP send response:",
+          data
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            data || "Failed to send OTP"
+          );
+        }
+
+        return data;
+      })
+      .then((data) => {
+        console.log("OTP response:", data);
+
+        setOtpSent(true);
+        setOtpVerified(false);
+        setOtp("");
+        setOtpMessage(
+          "OTP sent successfully. Check your email."
+        );
+      })
+      .catch((error) => {
+        console.error("OTP error:", error);
+
+        setOtpError(
+          "Failed to send OTP. Please try again."
+        );
+      });
+  };
+
+  // Verify OTP
+  const handleVerifyOtp = () => {
+    setOtpError("");
+    setOtpMessage("");
+
+    if (!email || !otp) {
+      setOtpError(
+        "Please enter the OTP"
+      );
+      return;
+    }
+
+    fetch(`${API_URL}/parents/verify-otp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        otp: otp,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.text();
+
+        console.log(
+          "OTP verify status:",
+          response.status
+        );
+
+        console.log(
+          "OTP verify response:",
+          data
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            data || "Invalid OTP"
+          );
+        }
+
+        return data;
+      })
+      .then((data) => {
+        console.log(
+          "OTP verification successful:",
+          data
+        );
+
+        setOtpVerified(true);
+        setOtpError("");
+        setOtpMessage(
+          "OTP verified successfully!"
+        );
+      })
+      .catch((error) => {
+        console.error(
+          "OTP verification error:",
+          error
+        );
+
+        setOtpVerified(false);
+        setOtpMessage("");
+        setOtpError(
+          "Invalid OTP. Please try again."
         );
       });
   };
@@ -189,6 +329,13 @@ function App() {
     ) {
       setSignUpError(
         "Please fill in all fields"
+      );
+      return;
+    }
+
+    if (!otpVerified) {
+      setSignUpError(
+        "Please verify your email with OTP first"
       );
       return;
     }
@@ -245,6 +392,12 @@ function App() {
         setEmail("");
         setPassword("");
         setConfirmPassword("");
+
+        setOtp("");
+        setOtpSent(false);
+        setOtpVerified(false);
+        setOtpMessage("");
+        setOtpError("");
       })
       .catch((error) => {
         console.error(
@@ -310,7 +463,10 @@ function App() {
           );
         }
 
-        setDriverName(data.driverName || "");
+        setDriverName(
+          data.driverName || ""
+        );
+
         setDriverLoggedIn(true);
         setDriverLoginError("");
       })
@@ -357,7 +513,10 @@ function App() {
       return;
     }
 
-    if (latitude < -90 || latitude > 90) {
+    if (
+      latitude < -90 ||
+      latitude > 90
+    ) {
       setDriverError(
         "Latitude must be between -90 and 90"
       );
@@ -427,7 +586,10 @@ function App() {
     : "";
 
   // Driver Login Page
-  if (isDriverMode && !driverLoggedIn) {
+  if (
+    isDriverMode &&
+    !driverLoggedIn
+  ) {
     return (
       <div className="login-page">
         <div className="login-box">
@@ -443,7 +605,9 @@ function App() {
             className="input-box"
             value={driverEmail}
             onChange={(e) =>
-              setDriverEmail(e.target.value)
+              setDriverEmail(
+                e.target.value
+              )
             }
           />
 
@@ -458,7 +622,9 @@ function App() {
               className="input-box"
               value={driverPassword}
               onChange={(e) =>
-                setDriverPassword(e.target.value)
+                setDriverPassword(
+                  e.target.value
+                )
               }
             />
 
@@ -485,7 +651,9 @@ function App() {
 
           <button
             className="login-button"
-            onClick={handleDriverLogin}
+            onClick={
+              handleDriverLogin
+            }
           >
             Login
           </button>
@@ -508,7 +676,10 @@ function App() {
   }
 
   // Driver Dashboard
-  if (isDriverMode && driverLoggedIn) {
+  if (
+    isDriverMode &&
+    driverLoggedIn
+  ) {
     return (
       <div
         className="dashboard"
@@ -530,15 +701,21 @@ function App() {
             margin: "30px auto",
           }}
         >
-          <h2>🚍 Driver Details</h2>
+          <h2>
+            🚍 Driver Details
+          </h2>
 
           <p>
-            <strong>Driver Name:</strong>{" "}
+            <strong>
+              Driver Name:
+            </strong>{" "}
             {driverName}
           </p>
 
           <p>
-            <strong>Bus ID:</strong>{" "}
+            <strong>
+              Bus ID:
+            </strong>{" "}
             {driverBusId}
           </p>
         </div>
@@ -550,7 +727,9 @@ function App() {
             margin: "30px auto",
           }}
         >
-          <h2>🚍 Update Bus Location</h2>
+          <h2>
+            🚍 Update Bus Location
+          </h2>
 
           <input
             type="number"
@@ -558,7 +737,9 @@ function App() {
             className="input-box"
             value={driverBusId}
             onChange={(e) =>
-              setDriverBusId(e.target.value)
+              setDriverBusId(
+                e.target.value
+              )
             }
           />
 
@@ -569,7 +750,9 @@ function App() {
             className="input-box"
             value={driverLatitude}
             onChange={(e) =>
-              setDriverLatitude(e.target.value)
+              setDriverLatitude(
+                e.target.value
+              )
             }
           />
 
@@ -580,7 +763,9 @@ function App() {
             className="input-box"
             value={driverLongitude}
             onChange={(e) =>
-              setDriverLongitude(e.target.value)
+              setDriverLongitude(
+                e.target.value
+              )
             }
           />
 
@@ -619,17 +804,23 @@ function App() {
             </h2>
 
             <p>
-              <strong>Bus ID:</strong>{" "}
+              <strong>
+                Bus ID:
+              </strong>{" "}
               {busLocation.busId}
             </p>
 
             <p>
-              <strong>Latitude:</strong>{" "}
+              <strong>
+                Latitude:
+              </strong>{" "}
               {busLocation.latitude}
             </p>
 
             <p>
-              <strong>Longitude:</strong>{" "}
+              <strong>
+                Longitude:
+              </strong>{" "}
               {busLocation.longitude}
             </p>
 
@@ -681,7 +872,9 @@ function App() {
   if (loggedIn) {
     return (
       <div className="dashboard">
-        <h1>Parent Dashboard</h1>
+        <h1>
+          Parent Dashboard
+        </h1>
 
         <p>
           Welcome to School Bus Tracking System
@@ -691,42 +884,50 @@ function App() {
 
           {/* Student Details */}
           <div className="card">
-            <h2>Student Details</h2>
+            <h2>
+              Student Details
+            </h2>
 
             {students.length > 0 ? (
-              students.map((student) => (
-                <div key={student.studentId}>
-                  <p>
-                    <strong>
-                      Student Name:
-                    </strong>{" "}
-                    {student.studentName}
-                  </p>
+              students.map(
+                (student) => (
+                  <div
+                    key={
+                      student.studentId
+                    }
+                  >
+                    <p>
+                      <strong>
+                        Student Name:
+                      </strong>{" "}
+                      {student.studentName}
+                    </p>
 
-                  <p>
-                    <strong>
-                      Class:
-                    </strong>{" "}
-                    {student.className}
-                  </p>
+                    <p>
+                      <strong>
+                        Class:
+                      </strong>{" "}
+                      {student.className}
+                    </p>
 
-                  <p>
-                    <strong>
-                      Parent ID:
-                    </strong>{" "}
-                    {student.parentId}
-                  </p>
+                    <p>
+                      <strong>
+                        Parent ID:
+                      </strong>{" "}
+                      {student.parentId}
+                    </p>
 
-                  <p>
-                    <strong>
-                      Bus ID:
-                    </strong>{" "}
-                    {student.busId}
-                  </p>
+                    <p>
+                      <strong>
+                        Bus ID:
+                      </strong>{" "}
+                      {student.busId}
+                    </p>
 
-                  <hr />
-                </div>
-              ))
+                    <hr />
+                  </div>
+                )
+              )
             ) : (
               <p>
                 No student details available.
@@ -741,12 +942,16 @@ function App() {
               minWidth: "350px",
             }}
           >
-            <h2>Bus Location</h2>
+            <h2>
+              Bus Location
+            </h2>
 
             {busLocation ? (
               <>
                 <p>
-                  <strong>Bus ID:</strong>{" "}
+                  <strong>
+                    Bus ID:
+                  </strong>{" "}
                   {busLocation.busId}
                 </p>
 
@@ -764,7 +969,6 @@ function App() {
                   {busLocation.longitude}
                 </p>
 
-                {/* Live Map */}
                 <div
                   style={{
                     marginTop: "15px",
@@ -805,7 +1009,9 @@ function App() {
 
           {/* Notifications */}
           <div className="card">
-            <h2>Notifications</h2>
+            <h2>
+              Notifications
+            </h2>
 
             {notifications.length > 0 ? (
               notifications.map(
@@ -854,7 +1060,9 @@ function App() {
     return (
       <div className="login-page">
         <div className="login-box">
-          <h1>Create Account</h1>
+          <h1>
+            Create Account
+          </h1>
 
           <p className="login-subtitle">
             Register as a Parent
@@ -866,7 +1074,9 @@ function App() {
             className="input-box"
             value={parentName}
             onChange={(e) =>
-              setParentName(e.target.value)
+              setParentName(
+                e.target.value
+              )
             }
           />
 
@@ -876,7 +1086,9 @@ function App() {
             className="input-box"
             value={phoneNumber}
             onChange={(e) =>
-              setPhoneNumber(e.target.value)
+              setPhoneNumber(
+                e.target.value
+              )
             }
           />
 
@@ -885,11 +1097,72 @@ function App() {
             placeholder="Email"
             className="input-box"
             value={email}
-            onChange={(e) =>
-              setEmail(e.target.value)
-            }
+            onChange={(e) => {
+              setEmail(e.target.value);
+
+              // New email requires a new OTP
+              setOtpSent(false);
+              setOtpVerified(false);
+              setOtp("");
+              setOtpMessage("");
+              setOtpError("");
+            }}
           />
 
+          {/* Send OTP */}
+          <button
+            type="button"
+            className="login-button"
+            onClick={handleSendOtp}
+          >
+            Send OTP
+          </button>
+
+          {/* OTP Section */}
+          {otpSent && (
+            <>
+              <input
+                type="text"
+                placeholder="Enter OTP"
+                className="input-box"
+                value={otp}
+                maxLength={6}
+                onChange={(e) =>
+                  setOtp(
+                    e.target.value.replace(
+                      /\D/g,
+                      ""
+                    )
+                  )
+                }
+              />
+
+              <button
+                type="button"
+                className="login-button"
+                onClick={handleVerifyOtp}
+                disabled={otpVerified}
+              >
+                {otpVerified
+                  ? "OTP Verified"
+                  : "Verify OTP"}
+              </button>
+            </>
+          )}
+
+          {otpError && (
+            <p className="login-error">
+              {otpError}
+            </p>
+          )}
+
+          {otpMessage && (
+            <p className="success-message">
+              {otpMessage}
+            </p>
+          )}
+
+          {/* Password */}
           <div className="password-container">
             <input
               type={
@@ -901,7 +1174,9 @@ function App() {
               className="input-box"
               value={password}
               onChange={(e) =>
-                setPassword(e.target.value)
+                setPassword(
+                  e.target.value
+                )
               }
             />
 
@@ -959,6 +1234,11 @@ function App() {
                 setIsSignUp(false);
                 setSignUpError("");
                 setSignUpMessage("");
+                setOtp("");
+                setOtpSent(false);
+                setOtpVerified(false);
+                setOtpMessage("");
+                setOtpError("");
               }}
             >
               Sign In
@@ -1002,7 +1282,9 @@ function App() {
             className="input-box"
             value={password}
             onChange={(e) =>
-              setPassword(e.target.value)
+              setPassword(
+                e.target.value
+              )
             }
           />
 
@@ -1027,7 +1309,7 @@ function App() {
           </p>
         )}
 
-        {/* Parent Login Button */}
+        {/* Parent Login */}
         <button
           className="login-button"
           onClick={handleLogin}
@@ -1035,7 +1317,7 @@ function App() {
           Login
         </button>
 
-        {/* Driver Dashboard Button */}
+        {/* Driver Dashboard */}
         <button
           className="login-button"
           style={{
@@ -1058,6 +1340,8 @@ function App() {
             onClick={() => {
               setIsSignUp(true);
               setLoginError("");
+              setSignUpError("");
+              setSignUpMessage("");
             }}
           >
             Sign Up
