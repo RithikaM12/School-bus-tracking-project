@@ -31,16 +31,7 @@ public class ParentService {
             return null;
         }
 
-        // Generate next parent ID
-        Long nextParentId = parentRepository.findAll()
-                .stream()
-                .map(Parent::getParentId)
-                .filter(id -> id != null)
-                .max(Long::compareTo)
-                .orElse(0L) + 1;
-
-        parent.setParentId(nextParentId);
-
+        // MySQL will automatically generate parent_id
         return parentRepository.save(parent);
     }
 }
