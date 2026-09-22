@@ -1,15 +1,17 @@
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background: #eef4fb;
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #eef4ff;
+  color: #173b72;
 }
 
-/* ================= LOGIN ================= */
+/* =========================
+   LOGIN PAGE
+========================= */
 
 .login-page {
   min-height: 100vh;
@@ -17,195 +19,215 @@ body {
   align-items: center;
   justify-content: center;
   padding: 30px;
-  background: #eef4fb;
+  background:
+    radial-gradient(circle at 10% 10%, #d7e7ff 0, transparent 25%),
+    radial-gradient(circle at 90% 90%, #dcecff 0, transparent 25%),
+    #f4f8ff;
 }
 
+/* Main login container */
 .login-box {
-  position: relative;
-  width: 100%;
-  max-width: 1000px;
-  min-height: 620px;
+  width: 950px;
+  max-width: 100%;
+  min-height: 570px;
+  display: grid;
+  grid-template-columns: 45% 55%;
   background: white;
-  border-radius: 20px;
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
-  padding: 45px 5% 45px 50%;
+  box-shadow: 0 20px 50px rgba(30, 70, 130, 0.18);
 }
 
-/* ================= LEFT SIDE ================= */
+/* =========================
+   LEFT SIDE
+========================= */
 
 .login-box::before {
-  content: "🚌\A\A School Bus\A Tracking System\A\A 📍 Live Bus Tracking\A 🔔 Parent Notifications\A 🛡 Safe & Secure";
-
-  white-space: pre-wrap;
-
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-
-  width: 45%;
+  content: "🚍\A\A School Bus\A Tracking System\A\A 📍 Live Bus Tracking\A 🔔 Parent Notifications\A 🛡 Safe & Secure";
+  white-space: pre-line;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  text-align: center;
-  padding: 40px;
+  text-align: left;
 
-  background: #dceeff;
-  color: #17325c;
+  padding: 50px;
+  background: linear-gradient(
+    145deg,
+    #2563eb,
+    #1677d2
+  );
 
-  font-size: 25px;
-  font-weight: bold;
-  line-height: 1.6;
+  color: white;
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.7;
 }
 
-/* ================= RIGHT SIDE ================= */
+/* =========================
+   FORM SIDE
+========================= */
 
-.login-box > * {
+.login-box > h1,
+.login-box > p,
+.login-box > input,
+.login-box > div,
+.login-box > button {
+  grid-column: 2;
+}
+
+/*
+  Since the original JSX does not have
+  a separate right-side wrapper,
+  position the form elements properly.
+*/
+
+.login-box {
   position: relative;
-  width: 100%;
+  padding: 70px 55px 40px 45%;
 }
 
-/* TITLE */
+.login-box::before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 45%;
+  height: 100%;
+  padding: 60px 45px;
+}
 
 .login-box h1 {
-  margin: 10px auto 25px;
+  margin: 0 0 12px;
   text-align: center;
-  color: #17325c;
   font-size: 30px;
+  color: #123d78;
 }
-
-/* SUBTITLE */
 
 .login-subtitle {
   text-align: center;
-  color: #60758f;
   font-size: 18px;
-  margin-bottom: 20px;
+  color: #6b7f9f;
+  margin: 0 0 28px;
 }
 
-/* ================= INPUTS ================= */
+/* =========================
+   INPUTS
+========================= */
 
 .input-box {
-  display: block;
-
   width: 100%;
-  margin: 12px auto;
+  height: 52px;
+  margin-bottom: 15px;
 
-  padding: 14px 16px;
+  padding: 0 17px;
 
-  border: 1px solid #cbd8e8;
-  border-radius: 9px;
+  border: 1px solid #cbd9ee;
+  border-radius: 12px;
 
   background: #f8fbff;
-  color: #17325c;
 
   font-size: 15px;
+  color: #183b70;
+
   outline: none;
+
+  transition: 0.2s ease;
 }
 
 .input-box:focus {
-  border-color: #2878e8;
+  border-color: #2875e8;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(40, 117, 232, 0.12);
 }
 
-/* ================= PASSWORD ================= */
+/* =========================
+   PASSWORD
+========================= */
 
 .password-container {
   position: relative;
   width: 100%;
-  margin: 12px auto;
 }
 
 .password-container .input-box {
-  width: 100%;
-  margin: 0;
-  padding-right: 65px;
+  padding-right: 75px;
 }
 
 .show-password-button {
   position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
+  right: 12px;
+  top: 6px;
+
+  height: 40px;
 
   border: none;
   background: transparent;
 
-  color: #2878e8;
-  font-weight: bold;
+  color: #1769e0;
+  font-weight: 600;
 
   cursor: pointer;
 }
 
-/* ================= PASSWORD RULES ================= */
-
-.password-rules {
-  width: 100%;
-  margin: 10px auto;
-  padding: 5px 0;
+.show-password-button:hover {
+  color: #0d4fae;
 }
 
-.password-rules p {
-  margin: 7px 0;
-  font-size: 14px;
-}
-
-.valid {
-  color: #159447;
-}
-
-.invalid {
-  color: #d83b3b;
-}
-
-/* ================= LOGIN BUTTONS ================= */
+/* =========================
+   BUTTONS
+========================= */
 
 .login-button {
-  display: block;
-
   width: 100%;
-  margin: 15px auto 0;
+  height: 52px;
 
-  padding: 14px;
+  margin-top: 5px;
+  margin-bottom: 10px;
 
   border: none;
-  border-radius: 9px;
+  border-radius: 12px;
 
-  background: #2878e8;
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #1976d2
+  );
+
   color: white;
 
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 700;
 
   cursor: pointer;
+
+  transition: 0.2s ease;
 }
 
-.login-button:hover:not(:disabled) {
-  background: #1765ce;
+.login-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
 }
 
 .login-button:disabled {
-  background: #c5cfdb;
+  opacity: 0.65;
   cursor: not-allowed;
 }
 
-/* ================= SIGN UP TEXT ================= */
+/* =========================
+   SIGNUP TEXT
+========================= */
 
 .signup-text {
-  width: 100%;
-  margin: 20px auto 0;
-
   text-align: center;
-
-  color: #60758f;
+  color: #71829d;
   font-size: 14px;
+  margin-top: 18px;
 }
 
 .signup-link {
-  color: #2878e8;
-  font-weight: bold;
+  color: #1769e0;
+  font-weight: 700;
   cursor: pointer;
 }
 
@@ -213,147 +235,147 @@ body {
   text-decoration: underline;
 }
 
-/* ================= ERROR ================= */
+/* =========================
+   MESSAGES
+========================= */
 
 .login-error {
-  width: 100%;
-  margin: 10px auto;
-
   text-align: center;
-
-  color: #d83b3b;
+  color: #e53935;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 600;
+  margin: 5px 0 12px;
 }
-
-/* ================= SUCCESS ================= */
 
 .success-message {
-  width: 100%;
-  margin: 10px auto;
-
   text-align: center;
-
-  color: #159447;
+  color: #079447;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 600;
+  margin: 8px 0 12px;
 }
 
-/* ================= LOGOUT ================= */
+/* =========================
+   LOGOUT / BACK BUTTON
+========================= */
 
 .logout-button {
-  margin-top: 40px;
+  width: 100%;
+  max-width: 600px;
 
-  padding: 12px 30px;
+  height: 48px;
 
-  border: none;
-  border-radius: 9px;
+  margin: 15px auto;
 
-  background: #17325c;
-  color: white;
+  display: block;
+
+  border: 1px solid #cbd9ee;
+  border-radius: 10px;
+
+  background: white;
+  color: #2563eb;
+
+  font-size: 15px;
+  font-weight: 600;
 
   cursor: pointer;
 }
 
 .logout-button:hover {
-  background: #0f2342;
+  background: #eef5ff;
 }
 
-/* ================= DASHBOARD ================= */
+/* =========================
+   DASHBOARD
+========================= */
 
 .dashboard {
   min-height: 100vh;
-  padding: 50px 30px;
+  padding: 40px 25px;
+  background: #f4f8ff;
   text-align: center;
-  background: #eef4fb;
 }
 
 .dashboard h1 {
-  margin-bottom: 10px;
-  color: #17325c;
-  font-size: 40px;
+  color: #173f78;
+  margin-bottom: 8px;
 }
 
 .dashboard > p {
-  color: #60758f;
-  font-size: 18px;
+  color: #6d7f9b;
 }
 
 .dashboard-cards {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  margin-top: 45px;
-  flex-wrap: wrap;
+  max-width: 1150px;
+  margin: 35px auto;
+
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(300px, 1fr)
+  );
+
+  gap: 22px;
+
+  text-align: left;
 }
 
-/* ================= CARDS ================= */
-
 .card {
-  width: 280px;
-  min-height: 190px;
-
-  padding: 30px 25px;
-
   background: white;
-  border-radius: 16px;
+  padding: 25px;
+  border-radius: 18px;
 
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 25px rgba(30, 70, 130, 0.10);
+
+  border: 1px solid #e0e9f6;
 }
 
 .card h2 {
-  margin-bottom: 20px;
-  color: #17325c;
+  margin-top: 0;
+  color: #17447f;
+  font-size: 21px;
 }
 
 .card p {
-  margin: 10px 0;
-  color: #60758f;
+  color: #536987;
+  line-height: 1.6;
 }
 
-/* ================= MOBILE ================= */
+/* =========================
+   RESPONSIVE
+========================= */
 
-@media (max-width: 750px) {
+@media (max-width: 800px) {
 
   .login-page {
-    padding: 20px;
+    padding: 15px;
   }
 
   .login-box {
-    max-width: 500px;
+    width: 100%;
     min-height: auto;
 
-    padding: 30px;
+    display: block;
+
+    padding: 40px 28px 30px;
   }
 
   .login-box::before {
     position: relative;
 
-    width: 100%;
-    min-height: 200px;
+    width: calc(100% + 56px);
+    height: auto;
 
-    margin: -30px -30px 30px;
+    margin: -40px -28px 35px;
 
-    padding: 25px;
+    padding: 35px 25px;
 
-    font-size: 20px;
+    text-align: center;
+
+    font-size: 17px;
   }
 
   .login-box h1 {
     font-size: 25px;
-    margin-top: 10px;
-  }
-
-  .dashboard {
-    padding: 30px 15px;
-  }
-
-  .dashboard h1 {
-    font-size: 32px;
-  }
-
-  .card {
-    width: 100%;
-    max-width: 400px;
   }
 }
